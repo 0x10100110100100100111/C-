@@ -1,0 +1,189 @@
+#include <iostream.h>
+#include <conio.h>
+
+typedef struct{
+	int real;
+   int imaginary;
+}complex_number;
+
+void menu();
+complex_number make_complex_number(int r,int i);
+complex_number set_Real_part(int r,complex_number c);
+complex_number set_imaginary_part(int i,complex_number c);
+int get_real_part(complex_number c);
+int get_imaginary_part(complex_number c);
+complex_number add_complex_number(complex_number c1,complex_number c2);
+complex_number find_conjugate(complex_number c1);
+
+int pilih;
+
+void main(){  
+   int real=0,imaginary=0;
+   awal:
+   clrscr();
+   menu();
+   switch(pilih){
+   	case 1:{
+         clrscr();
+         cout<<"Masukkan bilangan real\t\t: ";cin>>real;
+         cout<<"Masukkan bilangan imaginer\t: ";cin>>imaginary;
+         complex_number a=make_complex_number(real,imaginary);
+         cout<<"0. Kembali ke menu utama"<<endl;
+         cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+         if(pilih==0)
+         goto awal;
+			else
+         cout<<"input yang anda masukkan salah";
+      }break;
+
+   	case 2:{
+         clrscr();
+         complex_number c=set_Real_part(real,c);
+         complex_number d=set_imaginary_part(imaginary,d);
+         cout<<"Bilangan Kompleks = "<<c.real<<"+"<<d.imaginary<<"i"<<endl;
+         cout<<"0. Kembali ke menu utama"<<endl;
+         cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+         if(pilih==0)
+         goto awal;
+			else
+         cout<<"input yang anda masukkan salah";
+      }break;
+
+   	case 3:{
+      clrscr();
+         cout<<"Ubah Bilangan Kompleks"<<endl;
+         cout<<"1. Ubah Bilangan Real"<<endl;
+         cout<<"2. Ubah Bilangan Imaginary"<<endl;
+         cout<<"0. Kembali ke menu utama"<<endl;
+         cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+
+			switch(pilih){
+         	case 1:{
+               clrscr();
+               cout<<"Masukkan Bilangan Real yang baru\t : ";cin>>real;
+               complex_number c;
+               int real=get_real_part(c);
+               cout<<"0. Kembali ke menu utama"<<endl;
+           		cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+               if(pilih==0)
+            	goto awal;
+   				else
+            	cout<<"input yang anda masukkan salah";
+            }break;
+
+         	case 2:{
+               clrscr();
+               cout<<"Masukkan Bilangan Imaginer yang baru  : ";cin>>imaginary;
+               complex_number d;
+               int imaginary=get_imaginary_part(d);
+               cout<<"0. Kembali ke menu utama"<<endl;
+           		cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+               if(pilih==0)
+            	goto awal;
+   				else
+            	cout<<"input yang anda masukkan salah";
+               }break;
+
+            default:
+            goto awal;
+            break;
+         }
+      }break;
+
+   	case 4:{
+         clrscr();
+      	cout<<"Masukkan bilangan untuk c1\t: ";cin>>real;
+         cout<<"Masukkan bilangan untuk c2\t: ";cin>>imaginary;
+         complex_number c1=make_complex_number(real,imaginary);
+         complex_number c2=make_complex_number(real,imaginary);
+			complex_number c3=add_complex_number(c1,c2);
+         cout<<"Bilangan Kompleks : "<<c3.real<<"+"<<c3.imaginary<<"i"<<endl;
+         cout<<"0. Kembali ke menu utama"<<endl;
+         cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+         if(pilih==0)
+         goto awal;
+			else
+         cout<<"input yang anda masukkan salah";
+      }break;
+
+   	case 5:{
+         clrscr();
+         complex_number c1;
+      	cout<<"Masukkan bilangan untuk c1\t: ";cin>>c1.real;
+         c1.imaginary=c1.real;
+			complex_number c2=find_conjugate(c1);
+         cout<<"Conjugate : "<<c2.real<<"+"<<c2.imaginary<<"i"<<endl;
+         cout<<"Conjugate : "<<c2.real<<"-"<<c2.imaginary<<"i"<<endl;
+         cout<<"Conjugate : "<<c2.real<<"+"<<c2.imaginary<<"i"<<endl;
+         cout<<"0. Kembali ke menu utama"<<endl;
+         cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+         if(pilih==0)
+         goto awal;
+			else
+         cout<<"input yang anda masukkan salah";
+      }break;
+
+      default:
+      goto exit;
+      break;
+   }
+getch();
+exit:
+}
+
+void menu(){
+   cout<<"Menu"<<endl;
+	cout<<"1. Buat Bilangan Kompleks Baru"<<endl;
+	cout<<"2. Tampilkan Bilangan Kompleks"<<endl;
+	cout<<"3. Ubah Bilangan Kompleks"<<endl;
+	cout<<"4. Menjumlahkan Bilangan Kompleks"<<endl;
+	cout<<"5. Cari Conjugate"<<endl;
+	cout<<"0. Keluar Program"<<endl;
+   cout<<"Masukkan Pilihan Anda : ";cin>>pilih;
+}
+
+complex_number make_complex_number(int r,int i){
+	complex_number c;
+	c.real=r;
+	c.imaginary=i;
+	return c;
+}
+
+complex_number set_Real_part(int r,complex_number c){
+	c.real=r;
+	return c;
+}
+
+complex_number set_imaginary_part(int i,complex_number c){
+	c.imaginary=i;
+	return c;
+}
+
+int get_real_part(complex_number c){
+	int r;
+	r=c.real;
+	return r;
+}
+
+int get_imaginary_part(complex_number c){
+	int i;
+	i=c.imaginary;
+	return i;
+}
+complex_number add_complex_number(complex_number c1,complex_number c2){
+	complex_number c3;
+	int real,imaginary;
+	real=get_real_part(c1)+get_real_part(c2);
+	imaginary= get_imaginary_part(c1)+get_imaginary_part(c2);
+	c3=make_complex_number(real,imaginary);
+	return c3;
+}
+
+complex_number find_conjugate(complex_number c1){
+	complex_number c2;
+	int real,imaginary;
+	real=get_real_part(c1);
+	imaginary=get_imaginary_part(c1);
+	c2=make_complex_number(real,imaginary);
+	return c2;
+}
