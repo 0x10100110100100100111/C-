@@ -1,0 +1,330 @@
+#include <iostream.h>
+#include <conio.h>
+#include <string.h>
+#include <iomanip.h>
+#include <stdio.h>
+const int tot=100;
+
+int jum,nim[tot],quis[tot],tugas[tot],uts[tot],uas[tot],absen[tot];
+float a[tot],b[tot],c[tot],d[tot],e[tot],t[tot];
+char nama[tot][tot],kelas[tot];
+
+void judul()
+{
+	cout<<"====================================================================\n";
+	cout<<"      PROGRAM PERHITUNGAN NILAI MATA KULIAH JARINGAN KOMPUTER\n";
+   cout<<"          By : Abdul Azis (5150411080 / TI B UTY 2015)\n";
+	cout<<"====================================================================\n";
+}
+
+void InputData()
+{
+   for(int i=1;i<=jum;i++)
+   {  cout<<"Data Mahasiswa ke-"<<i<<endl;
+      cout<<"Input Nim\t\t: ";cin>>nim[i];
+      cout<<"Input Nama Depan\t: ";cin>>nama[i];
+      cout<<"Input Kelas\t\t: ";cin>>kelas[i];
+      cout<<"Input Jumlah Hadir\t: ";cin>>absen[i];
+      cout<<"Input Nilai Quis\t: ";cin>>quis[i];
+      cout<<"Input Nilai Tugas\t: ";cin>>tugas[i];
+      cout<<"Input Nilai UTS\t\t: ";cin>>uts[i];
+      cout<<"Input Nilai UAS\t\t: ";cin>>uas[i];
+      clrscr();
+      judul();
+   }
+}
+
+float HitungQuis(int quis)
+{
+ 	return(0.2*quis);
+}
+
+float HitungTugas(int tugas)
+{
+ 	return(0.2*tugas);
+}
+
+float HitungUts(int uts)
+{
+ 	return(0.25*uts);
+}
+
+float HitungUas(int uas)
+{
+ 	return(0.25*uas);
+}
+
+float HitungAbsen(int absen)
+{
+ 	return(10*absen/14);
+}
+
+float NilaiAkhir(int u, int v, int w, int x, int y)
+{
+	return (u+v+w+x+y);
+}
+
+void menu()
+{
+	cout<<"Main Menu"<<endl;
+   cout<<"1. Tampilkan Data"<<endl;
+   cout<<"2. Urutkan Data (Berdasar Nilai)"<<endl;
+   cout<<"3. Cari Data"<<endl;
+   cout<<"4. Tambah Data"<<endl;
+   cout<<"5. Ubah Data"<<endl;
+   cout<<"6. Hapus Data"<<endl;
+   cout<<"7. Keluar"<<endl;
+}
+
+void field()
+{
+		cout<<"\n--------------------------------------------------------------------\n";
+      cout<<"No"<<setw(4)<<"NIM"<<setw(8)<<"Nama"<<setw(4)
+      <<"Kls"<<setw(4)<<"Hdr"<<setw(5)<<"Quis"<<setw(7)<<"Tugas"
+      <<setw(4)<<"Uts"<<setw(4)<<"Uas"<<setw(7)<<"Nilai"<<setw(7)
+      <<"Huruf"<<setw(8)<<"Status"<<endl;
+      cout<<"--------------------------------------------------------------------\n";
+}
+
+void tampil()
+{
+	for(int i=1;i<=jum;i++)
+   {
+	cout<<i<<"."<<setw(4)<<nim[i]<<setw(8)<<nama[i]
+	<<setw(4)<<kelas[i]<<setw(4)<<absen[i]<<setw(5)<<quis[i]<<setw(7)
+   <<tugas[i]<<setw(4)<<uts[i]<<setw(4)<<uas[i]<<setw(7)<<t[i];
+
+   if (t[i]>=80)
+   	cout<<setw(7)<<"A"<<setw(8)<<"Lulus"<<endl;
+   else if(t[i]>=65)
+   	cout<<setw(7)<<"B"<<setw(8)<<"Lulus"<<endl;
+   else if(t[i]>=50)
+   	cout<<setw(7)<<"C"<<setw(8)<<"Lulus"<<endl;
+   else
+   	cout<<setw(7)<<"D"<<setw(12)<<"Tdk Lulus"<<endl;
+   }
+}
+
+void main()
+{
+	int pilih;
+   judul();
+   cout<<"Masukkan Jumlah Data Mahasiswa : ";cin>>jum;
+   clrscr();
+   judul();
+   InputData();
+   awal:
+   clrscr();
+   judul();
+   menu();
+   cout<<"Masukkan Pilihan : ";cin>>pilih;
+
+   switch(pilih)
+   {
+   case 1:
+   		{
+         clrscr();
+         judul();
+         field();
+         for(int i=1;i<=jum;i++)
+         	{
+      		a[i]=HitungAbsen(absen[i]);
+   			b[i]=HitungQuis(quis[i]);
+     			c[i]=HitungTugas(tugas[i]);
+   			d[i]=HitungUts(uts[i]);
+   			e[i]=HitungUas(uas[i]);
+      		t[i]=NilaiAkhir(a[i],b[i],c[i],d[i],e[i]);
+   			}
+         tampil();
+      	cout<<"--------------------------------------------------------------------\n";
+         getch();
+         goto awal;
+   		}
+   break;
+   case 2:
+         {
+         float temp;
+         char temp2,temp3[tot][tot];
+         clrscr();
+         judul();
+         for(int i=1;i<=jum;i++)
+         {
+         	for(int j=1;j<=i;j++)
+            {
+            	if(t[i]>t[j])
+               	{
+                   temp=t[i];
+                   t[i]=t[j];
+                   t[j]=temp;
+
+                   temp=nim[i];
+                   nim[i]=nim[j];
+                   nim[j]=temp;
+
+                   temp=tugas[i];
+                   tugas[i]=tugas[j];
+                   tugas[j]=temp;
+
+                   temp=uts[i];
+                   uts[i]=uts[j];
+                   uts[j]=temp;
+
+                   temp=uas[i];
+                   uas[i]=uas[j];
+                   uas[j]=temp;
+
+                   temp=quis[i];
+                   quis[i]=quis[j];
+                   quis[j]=temp;
+
+                   temp=absen[i];
+                   absen[i]=absen[j];
+                   absen[j]=temp;
+
+                   temp2=kelas[i];
+                   kelas[i]=kelas[j];
+                   kelas[j]=temp2;
+
+                   strcpy(temp3[i],nama[j]);
+                   strcpy(nama[j],nama[i]);
+                   strcpy(nama[i],temp3[i]);
+                  }
+            }
+         }
+         field();
+			tampil();
+      	cout<<"--------------------------------------------------------------------\n";
+         getch();
+         goto awal;
+         }
+   break;
+   case 3:
+   		{
+         char cari[20];
+         clrscr();
+         judul();
+         cout<<"Masukkan Nama yang Dicari : ";cin>>cari;
+         int flag=0,nomor=0;
+         for (int i=1;i<=jum;i++)
+         	{
+         	if(strcmp(nama[i],cari)==0)
+            	{
+               flag=1;
+               nomor=i;
+               break;
+               }
+
+         	}
+         	if (flag==1)
+         		{
+            	cout<<"Data ditemukan di nomor "<<nomor<<endl;
+               field();
+               cout<<nomor<<"."<<setw(4)<<nim[nomor]<<setw(8)<<nama[nomor]
+					<<setw(4)<<kelas[nomor]<<setw(4)<<absen[nomor]<<setw(5)<<quis[nomor]<<setw(7)
+   				<<tugas[nomor]<<setw(4)<<uts[nomor]<<setw(4)<<uas[nomor]<<setw(7)<<t[nomor];
+
+  					 	if (t[nomor]>=80)
+   					cout<<setw(7)<<"A"<<setw(8)<<"Lulus"<<endl;
+   					else if(t[nomor]>=65)
+   					cout<<setw(7)<<"B"<<setw(8)<<"Lulus"<<endl;
+   					else if(t[nomor]>=50)
+                  cout<<setw(7)<<"C"<<setw(8)<<"Lulus"<<endl;
+   					else
+   					cout<<setw(7)<<"D"<<setw(12)<<"Tdk Lulus"<<endl;
+            	}
+            else
+            {
+               cout<<"Data tidak ditemukan"<<endl;
+            }
+         cout<<"--------------------------------------------------------------------\n";
+         getch();
+         goto awal;
+         }
+   break;
+   case 4:
+   		{
+         clrscr();
+         judul();
+         jum=jum+1;
+         cout<<"Input Data Mahasiswa ke-"<<jum<<endl;
+      	cout<<"Input Nim\t\t: ";cin>>nim[jum];
+      	cout<<"Input Nama Depan\t: ";cin>>nama[jum];
+      	cout<<"Input Kelas\t\t: ";cin>>kelas[jum];
+      	cout<<"Input Jumlah Hadir\t: ";cin>>absen[jum];
+      	cout<<"Input Nilai Quis\t: ";cin>>quis[jum];
+      	cout<<"Input Nilai Tugas\t: ";cin>>tugas[jum];
+      	cout<<"Input Nilai UTS\t\t: ";cin>>uts[jum];
+      	cout<<"Input Nilai UAS\t\t: ";cin>>uas[jum];
+         goto awal;
+         }
+   break;
+   case 5:
+   		{
+         int ubah;
+         clrscr();
+         judul();
+         	if(jum>=1)
+         		cout<<"Data yang tersedia 1-"<<jum<<endl;
+            else
+            	{
+               cout<<"Data yang tersedia 0-"<<jum<<endl;
+               }
+         cout<<"Ubah Data ke :";cin>>ubah;
+         clrscr();
+         judul();
+         cout<<"Ubah Data Mahasiswa ke-"<<ubah<<endl;
+      	cout<<"Ubah Nim\t\t("<<nim[ubah]<<")\t: ";				cin>>nim[ubah];
+      	cout<<"Ubah Nama Depan\t\t("<<nama[ubah]<<")\t: ";		cin>>nama[ubah];
+      	cout<<"Ubah Kelas\t\t("<<kelas[ubah]<<")\t: ";			cin>>kelas[ubah];
+      	cout<<"Ubah Jumlah Hadir\t("<<absen[ubah]<<")\t: ";	cin>>absen[ubah];
+      	cout<<"Ubah Nilai Quis\t\t("<<quis[ubah]<<")\t: ";		cin>>quis[ubah];
+      	cout<<"Ubah Nilai Tugas\t("<<tugas[ubah]<<")\t: ";		cin>>tugas[ubah];
+      	cout<<"Ubah Nilai UTS\t\t("<<uts[ubah]<<")\t: ";		cin>>uts[ubah];
+      	cout<<"Ubah Nilai UAS\t\t("<<uas[ubah]<<")\t: ";		cin>>uas[ubah];
+         clrscr();
+         judul();
+         cout<<"Data Mahasiswa ke-"<<ubah<<" Berhasil diubah!!!";
+         getch();
+         goto awal;
+         }
+   break;
+   case 6:
+   		{
+         int hapus;
+         clrscr();
+         judul();
+         	if(jum>=1)
+         		cout<<"Data yang tersedia 1-"<<jum<<endl;
+            else
+            	{
+               cout<<"Data yang tersedia 0-"<<jum<<endl;
+               }
+         cout<<"Hapus Data ke :";cin>>hapus;
+         jum=jum-1;
+         clrscr();
+         judul();
+         for(int i=hapus;i<=jum;i++)
+         	{
+            nim[i]=nim[i+1];
+            kelas[i]=kelas[i+1];
+            absen[i]=absen[i+1];
+            quis[i]=quis[i+1];
+            tugas[i]=tugas[i+1];
+            uts[i]=uts[i+1];
+            uas[i]=uas[i+1];
+            strcpy(nama[i],nama[i+1]);
+            }
+         clrscr();
+         judul();
+         cout<<"Data Mahasiswa ke-"<<hapus<<" Berhasil dihapus!!!";
+         getch();
+         goto awal;
+         }
+   break;
+   default:
+   		goto exit;
+   break;
+   }
+getch();
+exit:
+}
