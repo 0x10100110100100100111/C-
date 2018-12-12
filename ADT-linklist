@@ -1,0 +1,223 @@
+#include <iostream>
+#include <conio>
+
+//using namespace std;
+
+typedef int infotype;
+typedef struct tNode *address;
+typedef struct tNode
+{
+	infotype Info;
+	address Next;
+}Node;
+
+typedef Node *List;
+void CreateEmpty(List &L);
+bool IsEmpty(List L);
+bool IsOneElmt(List L);
+bool IsFound(List L, infotype X);
+void InsertFirst(List &L, address P);
+void InsertAfter(List &L, address Prec, address P);
+void InsertLast(List &L, address P);
+address Alokasi(infotype X);
+void PrintInfo(List L);
+void DelFirst(List &L);
+void DelLast(List &L);
+void DelAt(List &L, address P);
+void DelOf(List &L, infotype X);
+void menu();
+
+void main()
+{
+	infotype pilihan;
+   List L;
+   awal:
+   clrscr();
+	menu();
+   cout<<"Masukkan Pilihan : ";cin>>pilihan;
+   switch(pilihan)
+   {
+   	case 1:
+      {
+      	cout<<"Masukkan angka : "; cin>>(*L).Info;
+         InsertFirst(L, Alokasi((*L).Info));
+      	goto awal;
+      }
+      break;
+      case 2:
+      {
+      	cout<<"Masukkan angka : "; cin>>(*L).Info;
+      	InsertLast(L, Alokasi((*L).Info));
+      	goto awal;
+      }
+      break;
+      case 3:
+      {
+       	infotype indeks;
+      	cout<<"Masukkan indeks awal\t : "; cin>>indeks;
+      	cout<<"Masukkan angka\t\t : "; cin>>(*L).Info;
+      	InsertLast(L, Alokasi((*L).Info));
+         InsertAfter(L, Alokasi(indeks), Alokasi((*L).Info));
+      	goto awal;
+      }
+      break;
+      case 4:
+      {
+      	PrintInfo(L);
+         getch();
+         goto awal;
+      }
+      break;
+      case 5:
+      {
+      	DelFirst(L);
+      	goto awal;
+      }
+      break;
+      case 6:
+      {
+      	DelLast(L);
+      	goto awal;
+      }
+      break;
+      case 7:
+      {
+      	infotype indeks;
+      	cout<<"Masukkan indeks\t : "; cin>>indeks;
+      	DelAt(L, Alokasi(indeks));
+         goto awal;
+      }
+      break;
+      case 8:
+      {
+      	infotype indeks;
+      	cout<<"Masukkan indeks\t : "; cin>>indeks;
+      	DelOf(L, indeks);
+         goto awal;
+      }
+      break;
+   }
+
+getch();
+}
+
+void CreateEmpty(List &L)
+{
+	L = NULL;
+}
+
+bool IsEmpty(List L)
+{
+	return(L == NULL);
+}
+
+bool IsOneElmt(List L)
+{
+	return(IsEmpty(L->Next));
+}
+
+bool IsFound(List L, infotype X)
+{
+   if(IsEmpty(L)) //basis 0
+      return false;
+   else //rekurens
+      return (L->Info==X || IsFound(L->Next,X));
+}
+
+void InsertFirst(List &L, address P)
+{
+	P->Next = L;
+	L = P;
+}
+
+void InsertAfter(List &L, address Prec, address P)
+{
+	P->Next = Prec->Next;
+	Prec->Next = P;
+}
+
+void InsertLast(List &L, address P)
+{
+	if (IsEmpty(L))             //basis 0
+		InsertFirst(L, P);
+	else if (IsOneElmt(L))      //basis 1
+		InsertAfter(L, L, P);
+	else
+		InsertLast(L->Next, P);  //rekurens
+}
+
+address Alokasi(infotype X)
+{
+	address P = new(Node);
+	if (P == NULL)      //alokasi gagal
+		return NULL;
+	else             //alokasi berhasil
+	{
+		P->Info = X;
+		P->Next = NULL;
+		return P;
+	}
+}
+
+void PrintInfo(List L)
+{
+	if (IsEmpty(L))		//basis
+	{ //no action 
+	}
+	else			//rekurens
+	{
+		cout << L->Info<<"  ";
+		PrintInfo(L->Next);
+	}
+}
+
+void DelFirst(List &L)
+{
+	address P;
+	P = L;
+	L = L->Next;
+	delete(P); //mendealokasi dari memori
+}
+
+void DelLast(List &L)
+{
+	if (IsOneElmt(L))
+		DelFirst(L);
+	else
+		DelLast(L->Next);
+}
+
+void DelAt(List &L, address P)
+{
+	if (!IsEmpty(L))
+	{
+		if (L == P)
+			DelFirst(L);
+		else
+			DelAt(L->Next, P);
+	}
+}
+
+void DelOf(List &L, infotype X)
+{
+	if (!IsEmpty(L))
+	{
+		if (L->Info == X)
+			DelFirst(L);
+		else
+			DelOf(L->Next, X);
+	}
+}
+
+void menu()
+{
+	cout<<"Menu"<<endl;
+   cout<<"1. Insert First"<<endl;
+   cout<<"2. Insert Last"<<endl;
+   cout<<"3. Insert After"<<endl;
+   cout<<"4. Print Info"<<endl;
+   cout<<"5. Delete First"<<endl;
+   cout<<"6. Delete Last"<<endl;
+   cout<<"7. Delete At"<<endl;
+   cout<<"8. Delete Of"<<endl;
+}
