@@ -1,0 +1,202 @@
+#include <iostream>
+using namespace std;
+
+typedef int infotype;
+typedef struct tNode *address;
+typedef struct tNode
+{
+	infotype Info;
+	address Next;
+}Node;
+
+typedef Node *List; // tipe data untuk list utama
+
+void CreateEmpty(List &L);
+//IS  : L sembarang
+//FS  : L terdefinisi dan kosong 
+
+bool IsEmpty(List L);
+//IS: L terdefinisi
+//FS: true jika L kosong, false  jika L tidak kosong
+
+bool IsOneElmt(List L);
+//IS: L terdefinisi, L tidak kosong
+//FS: true jika L hanya terdiri dari 1 node, dan false jika tidak 
+
+void InsertFirst(List &L, address P);
+//IS: L terdefinisi, mungkin kosong, P alamat suatu Node tertentu
+//FS: Node yang ditunjuk P menjadi Node pertama L
+
+void InsertAfter(List &L, address Prec, address P);
+//IS: L terdefinisi tidak kosong, Prec alamat valid salah satu node di L, P alamat node yang akan di-insert ke dalam list
+//FS: Node yang ditunjuk P akan menjadi Node pada L dengan posisi setelah alamat Prec
+
+void InsertLast(List &L, address P);
+// IS: L terdefinisi, mungkin kosong, P alamat valid node tertentu
+// FS: Node yang ditunjuk P menjadi node terakhir pada L. Insert tanpa Alokasi
+
+address Alokasi(infotype X);
+// IS: menerima X terdefinisi yang merupakan calon Info suatu Node
+// FS: alamat Node yang mempunyai Info=X, tetapi jika alokasi gagal akan mengirimkan NULL
+
+void PrintInfo(List L);
+//IS: L terdefinisi, mungkin kosong
+//FS: Info tiap Node dalam L dicetak ke layar
+
+void DelFirst(List &L);
+//IS: L terdefinisi tidak kosong
+//FS: Node awal L terhapuskan dan didealokasi dari memori
+
+void DelLast(List &L);
+//IS: L terdefinisi dan tidak kosong
+//FS: Node terakhir L dihapus dan didealokasi dari memori
+
+void DelAt(List &L, address P);
+//IS: L  dan P terdefinisi, L tidak kosong, P alamat valid node pada L
+//FS: Node beralamat P pada L terhapuskan dan didealokasi dari memori
+
+void DelOf(List &L, infotype X);
+//IS: L terdefinisi tidak kosong
+//FS: node pada L yang info-nya=X dihapus, jika tidak ada L tetap */
+
+void main()
+{
+	cout << "\nHello list...\n";
+
+	List myList;
+	CreateEmpty(myList);
+
+	address simpulBaru = Alokasi(99);
+	InsertFirst(myList, simpulBaru);
+	simpulBaru = Alokasi(26);
+	InsertFirst(myList, simpulBaru);
+	simpulBaru = Alokasi(93);
+	InsertFirst(myList, simpulBaru);
+	
+	simpulBaru = Alokasi(25);
+	InsertLast(myList, simpulBaru);
+
+	
+	
+	simpulBaru = Alokasi(46);
+	InsertAfter(myList, myList->Next->Next, simpulBaru);
+
+	system("pause");
+	cout << "\nisi di dalam list (before):\n";
+	PrintInfo(myList);
+
+	//DelFirst(myList);
+	//DelLast(myList);
+	//DelAt(myList, myList->Next->Next);
+	
+	DelOf(myList, 100);
+
+	system("pause");
+	cout << "\nisi di dalam list (after):\n";
+	PrintInfo(myList);
+
+
+
+	cout << endl;	
+}
+
+
+void CreateEmpty(List &L)
+{
+	L = NULL;
+}
+
+bool IsEmpty(List L)
+{
+	return(L == NULL);
+}
+
+bool IsOneElmt(List L)
+{
+	return(IsEmpty(L->Next));
+}
+	
+void InsertFirst(List &L, address P)
+{
+	P->Next = L;
+	L = P;
+}
+
+void InsertAfter(List &L, address Prec, address P)
+{
+	P->Next = Prec->Next;
+	Prec->Next = P;
+}
+
+void InsertLast(List &L, address P)
+{
+	if (IsEmpty(L))             //basis 0
+		InsertFirst(L, P);
+	else if (IsOneElmt(L))      //basis 1
+		InsertAfter(L, L, P);
+	else
+		InsertLast(L->Next, P);  //rekurens
+}
+
+address Alokasi(infotype X)
+{
+	address P = new(Node);
+	if (P == NULL)      //alokasi gagal
+		return NULL;
+	else             //alokasi berhasil
+	{
+		P->Info = X;
+		P->Next = NULL;
+		return P;
+	}
+}
+
+void PrintInfo(List L)
+{
+	if (IsEmpty(L))		//basis
+	{ //no action 
+	}
+	else			//rekurens
+	{
+		cout << L->Info<<"  ";
+		PrintInfo(L->Next);
+	}
+}
+
+void DelFirst(List &L)
+{
+	address P;
+	P = L;
+	L = L->Next;
+	delete(P); //mendealokasi dari memori
+}
+
+void DelLast(List &L)
+{
+	if (IsOneElmt(L))
+		DelFirst(L);
+	else
+		DelLast(L->Next);
+}
+
+void DelAt(List &L, address P)
+{
+	if (!IsEmpty(L))
+	{
+		if (L == P)
+			DelFirst(L);
+		else
+			DelAt(L->Next, P);
+	}
+}
+
+void DelOf(List &L, infotype X)
+{
+	if (!IsEmpty(L))
+	{
+		if (L->Info == X)
+			DelFirst(L);
+		else
+			DelOf(L->Next, X);
+	}
+}
