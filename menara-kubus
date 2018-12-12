@@ -1,0 +1,34 @@
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+   int jum, balok[50][3], min[50], max[50], terendah=0, tertinggi=0;
+   cout<<"";cin>>jum;
+
+	for (int i=0;i<jum;i++)
+   {
+   	for (int j=0;j<3;j++)
+   	{
+		cout<<"";cin>>balok[i][j];
+   	}
+   }
+
+   for (int i=0;i<jum;i++)
+   {
+   min[i]=balok[i][0];
+   max[i]=balok[i][0];
+   	for (int j=0;j<3;j++)
+   	{
+		if(balok[i][j]<min[i])
+      	min[i]=balok[i][j];
+      else if(balok[i][j]>max[i])
+      	max[i]=balok[i][j];
+   	}
+	terendah=terendah+min[i];
+	tertinggi=tertinggi+max[i];
+   }
+clrscr();
+cout<<terendah<<" "<<tertinggi;
+getch();
+}
