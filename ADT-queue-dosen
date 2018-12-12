@@ -1,0 +1,215 @@
+#include <iostream>
+
+using namespace std;
+
+//bag. spesifikasi
+#define MaxEl 5
+typedef int address;
+typedef char infotype;
+typedef struct 
+{
+	infotype T[MaxEl];  	//isi Queue
+	address Head;   		//index awal Queue
+	address Tail;     		//index akhir Queue
+} Queue;
+
+void CreateEmpty(Queue *Q);
+//IS: Q sembarang
+//FS: Q menjadi kosong
+
+int IsEmpty(Queue Q);
+//IS: Q terdefinisi, mungkin kosong
+//FS : TRUE jika Q kosong, FALSE jika tidak
+
+int IsFull(Queue Q);
+//IS: Q terdefinisi, mungkin kosong
+//FS : TRUE jika Q penuh, FALSE jika tidak
+
+int IsOneElmt(Queue Q);
+//IS: Q terdefinisi, tidak kosong
+//FS: TRUE jika Q hanya berisi 1 elemen, FALSE jika tidak
+
+void Add(Queue *Q, infotype val);
+//IS: Q terdefinisi, mungkin kosong, mungkin penuh, val terdefinisi
+//FS: jika Q tidak penuh, val akan menjadi elemen Tail Q
+
+void Del(Queue *Q, infotype *val);
+//IS: Q terdefinisi, mungkin kosong
+//FS: jika Q tidak kosong, elemen Head Q akan terhapus
+
+void PrintQueue(Queue Q);
+//IS: Q terdefinisi, mungkin kosong
+//FS: semua elemen Q dari Head sampai Tail tercetak ke layar
+
+void Geser(Queue *Q, int indeks);
+
+//bag. main program
+void main()
+{
+	cout << "Hello queue...\n";
+
+	Queue myQueue;
+	CreateEmpty(&myQueue);
+
+	Add(&myQueue, 'A');
+	Add(&myQueue, 'B');
+	Add(&myQueue, 'C');
+	Add(&myQueue, 'D');
+	Add(&myQueue, 'E');
+
+	cout << "\nKondisi Antrian saat ini:\n";
+	PrintQueue(myQueue);
+
+	infotype valToDelete = 'E';
+	Del(&myQueue, &valToDelete);
+ 	Del(&myQueue, &valToDelete);
+   Del(&myQueue, &valToDelete);
+   Add(&myQueue, 'G');
+   Add(&myQueue, 'H');
+   Add(&myQueue, 'I');
+	//Del(&myQueue, &valToDelete);
+
+  	Geser(&myQueue, 2);
+	cout << "\nKondisi Antrian saat ini:\n";
+	PrintQueue(myQueue);
+	system("pause");
+}
+
+//bag. implementasi
+void CreateEmpty(Queue *Q)
+{
+	(*Q).Head = (*Q).Tail = -1;
+}
+
+int IsEmpty(Queue Q)
+{
+	return(Q.Head == -1 && Q.Tail == -1);
+}
+
+int IsOneElmt(Queue Q)
+{
+	return(Q.Head == Q.Tail && Q.Head != -1);
+}
+
+int IsFull(Queue Q)
+{
+	return(Q.Head<Q.Tail && Q.Tail - Q.Head == MaxEl - 1 ||
+		Q.Head>Q.Tail && Q.Head - Q.Tail == 1);
+}
+
+void Add(Queue *Q, infotype val)
+{
+	if (!IsFull(*Q))              //tidak full = kosong or isi sebagian
+	{
+		if (IsEmpty(*Q))          //kosong
+		{
+			(*Q).Head = (*Q).Tail = 0;
+			(*Q).T[(*Q).Head] = val;
+		}
+		else                             //isi sebagian
+		{
+			if ((*Q).Tail == MaxEl - 1)
+				(*Q).Tail = 0;
+			else
+				(*Q).Tail++;
+
+			(*Q).T[(*Q).Tail] = val;
+		}
+	}
+	else
+		cout<<"Error: Queue is full. No more place to be added\n";
+}
+
+void Del(Queue *Q, infotype *val)
+{
+	if (!IsEmpty(*Q)) //tdk kosong = tinggal 1 or masih banyak
+	{
+		*val = (*Q).T[(*Q).Head];
+		if (IsOneElmt(*Q))  //tinggal 1
+			CreateEmpty(&(*Q));
+		else  //masih banyak
+			if ((*Q).Head == MaxEl - 1)
+				(*Q).Head = 0;
+			else
+				(*Q).Head++;
+	}
+	else // jika kosong mengirimkan karakter '?‘
+		cout<<"Error: Empty Queue can not be deleted\n";
+}
+
+void PrintQueue(Queue Q)
+{
+	address i;
+	if (Q.Head <= Q.Tail) //keadaan normal
+	{
+		for (i = Q.Head; i <= Q.Tail; i++)
+		{
+			printf("%c ", Q.T[i]);
+		}
+	}
+	else  //keadaan membalik
+	{
+		for (i = Q.Head; i <= MaxEl - 1; i++)
+		{
+			printf("%c ", Q.T[i]);
+		}
+		for (i = 0; i <= Q.Tail; i++)
+		{
+			printf("%c ", Q.T[i]);
+		}
+	}
+	printf("\n");
+}
+
+void Geser(Queue *Q, int indeks)
+{
+	if (indeks >= 0 && indeks<MaxEl)
+	{
+		if (!IsEmpty(*Q))
+		{
+			if (IsOneElmt(*Q))// kondisi jika hanya ada 1 elemen di antrian
+				CreateEmpty(&(*Q));
+
+			else if (indeks == (*Q).Tail) // kondisi jika indeks yang akan digeser adalah indeks ekor
+				(*Q).Tail--;
+
+			else if ((*Q).Head < (*Q).Tail)// kondisi queue normal
+			{
+				for (int pos = indeks; pos<(*Q).Tail; pos++)
+				{
+					(*Q).T[pos] = (*Q).T[(pos + 1)];
+				}
+				(*Q).Tail--;
+			}
+         ////
+         else if ((*Q).Head > (*Q).Tail)
+         {
+         	if (indeks > (*Q).Head)
+            	{
+         		for (int pos = indeks; pos < MaxEl-1; pos++)
+						{
+						(*Q).T[pos] = (*Q).T[(pos + 1)];
+						}
+                  (*Q).T[(MaxEl-1)] = (*Q).T[0];
+                  	for (int a = 0; a<(*Q).Tail; a++)
+                  	{
+								(*Q).T[a] = (*Q).T[(a + 1)];
+							}
+							(*Q).Tail--;
+               }
+
+         	else //Keadaan indeks < Tail
+         		{
+              		for (int pos = indeks; pos<(*Q).Tail; pos++)
+						{
+               		(*Q).T[pos] = (*Q).T[(pos + 1)];
+                  }
+						(*Q).Tail--;
+         		}
+      	}
+         ////
+		}
+	}
+	else
+		cout << "indeks yang akan digeser tidak tersedia";
+}
